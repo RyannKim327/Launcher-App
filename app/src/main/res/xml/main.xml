@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+	xmlns:android="http://schemas.android.com/apk/res/android">
+	
+	<EditTextPreference
+		android:key="name"
+		android:title="Your name"
+		android:value="RyannKim327" />
+	
+	<EditTextPreference
+		android:key="color"
+		android:title="Text Colors"
+		android:value="#ff000000" />
+	
+	<Preference
+		android:key="def"
+		android:title="Set as default launcher"/>
+	
+</PreferenceScreen>
