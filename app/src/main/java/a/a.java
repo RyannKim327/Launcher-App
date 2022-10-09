@@ -1,12 +1,17 @@
 package a;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ResolveInfo;
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.view.Gravity;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
@@ -19,10 +24,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextClock;
 import android.widget.TextView;
 import java.util.List;
-import android.graphics.drawable.GradientDrawable;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-import android.os.Handler;
+import android.view.View.OnTouchListener;
+import android.view.MotionEvent;
+import android.widget.Toast;
+import android.widget.ScrollView;
+import android.content.DialogInterface;
 
 public class a extends Activity {
 	ListView apps;
@@ -51,10 +57,15 @@ public class a extends Activity {
 		GradientDrawable draw = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, new int[]{Color.parseColor("#10333333"), Color.parseColor("#ff333333")});
 		sp = PreferenceManager.getDefaultSharedPreferences(this);
 		
-		
 		td.setOrientation(LinearLayout.VERTICAL);
 		td.setGravity(Gravity.CENTER);
-		td.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+		td.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+		td.setOnClickListener(new OnClickListener(){
+				@Override
+				public void onClick(View p1) {
+					startActivity(new Intent(a.this, b.class));
+				}
+			});
 		
 		time.setFormat12Hour("hh:mm:ss");
 		time.setFormat24Hour("kk:mm:ss");
@@ -75,7 +86,7 @@ public class a extends Activity {
 		base.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 		
 		widgets.setOrientation(LinearLayout.VERTICAL);
-		widgets.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, Math.round(getWindowManager().getDefaultDisplay().getHeight() * 0.7f)));
+		widgets.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, Math.round(getWindowManager().getDefaultDisplay().getHeight() * 0.68f)));
 		widgets.setGravity(Gravity.CENTER);
 		
 		main.setGravity(Gravity.BOTTOM | Gravity.CENTER);
@@ -101,11 +112,42 @@ public class a extends Activity {
 					app_[j] = c;
 					app[j] = d;
 				}
+				int k = 0;
+				a = app_[i].toLowerCase().charAt(k);
+				b = app_[j].toLowerCase().charAt(k);
+				while(a == b && (k < app_[i].length() - 1 && k < app_[j].length() - 1)){
+					k++;
+					a = app_[i].toLowerCase().charAt(k);
+					b = app_[j].toLowerCase().charAt(k);
+					if(a < b){
+						String c = app_[i];
+						int d = app[i];
+						app_[i] = app_[j];
+						app[i] = app[j];
+						app_[j] = c;
+						app[j] = d;
+					}
+				}
 			}
 		}
 		
 		for(int i = 0; i < app_.length; i++){
-			str.add(app_[i].toString());
+			if(i < app_.length - 1 && i > 0){
+				if(app_[i].equals(app_[i + 1]) || app_[i - 1].equals(app_[i])){
+					String pack = list.get(app[i]).activityInfo.packageName;
+					str.add(app_[i].toString() + " (" + pack + ")");
+				}else{
+					str.add(app_[i].toString());
+				}
+			}
+			if(i == 0){
+				if(app_[i].equals(app_[i + 1])){
+					String pack = list.get(app[i]).activityInfo.packageName;
+					str.add(app_[i].toString() + " (" + pack + ")");
+				}else{
+					str.add(app_[i].toString());
+				}
+			}
 		}
 		
 		apps.setBackgroundDrawable(draw);
@@ -134,6 +176,7 @@ public class a extends Activity {
 		base.addView(main);
 		setContentView(base);
 		load();
+		welcome();
 	}
 	void load(){
 		int color = Color.BLACK;
@@ -152,6 +195,23 @@ public class a extends Activity {
 					load();
 				}
 			}, 500);
+	}
+	void welcome(){
+		final String key = "AlphaLite 0.1";
+		AlertDialog dialog = new AlertDialog(this);
+		dialog.setTitle("What's new?");
+		dialog.setMessage("There are new things added to this version unlike to the beta. But still, this is just a test version of the application, so that, if you found out some bugs and error, kindly go to my facebook page @NOOBGrammer2001 and let's have some talk.\n\nAdded Features.\n1. Sorted app name fixed\n2. Added package name for same app name\n3. Added customized name.\n4. Customized colors for user\n5. Fixed Custom color (Automatic black color for invalid hexadecimal color)\n6. Fixed SET AS DEFAULT LAUNCHER.\n7. Added Dialog for some infos.\n8. Fixed minor animation issues.");
+		dialog.setPositiveButton("Close", new DialogInterface.OnClickListener(){
+				@Override
+				public void onClick(DialogInterface p1, int p2) {
+					sp.edit().putBoolean(key, false).commit();
+				}
+			});
+		dialog.setCancelable(false);
+		dialog.setBackground(Color.parseColor("#ff333333"));
+		if(sp.getBoolean(key, true)){
+			dialog.display();
+		}
 	}
 	@Override
 	public void onBackPressed() {
