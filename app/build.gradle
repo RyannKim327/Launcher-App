@@ -18,8 +18,8 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+	useLibrary 'org.apache.http.legacy'
 }
-
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
 }

@@ -5,12 +5,23 @@
 	<EditTextPreference
 		android:key="name"
 		android:title="Your name"
-		android:value="RyannKim327" />
+		android:defaultValue="RyannKim327" />
 	
 	<EditTextPreference
 		android:key="color"
 		android:title="Text Colors"
-		android:value="#ff000000" />
+		android:defaultValue="#ff000000" />
+	
+	<EditTextPreference
+		android:key="size"
+		android:title="Font size"
+		android:inputType="number"
+		android:defaultValue="12"/>
+	
+	<CheckBoxPreference
+		android:key="sb"
+		android:title="Enable statusbar"
+		android:defaultValue="false"/>
 	
 	<Preference
 		android:key="def"

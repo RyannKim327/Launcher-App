@@ -29,17 +29,24 @@ import android.view.MotionEvent;
 import android.widget.Toast;
 import android.widget.ScrollView;
 import android.content.DialogInterface;
+import android.icu.util.GregorianCalendar;
+import java.util.Date;
+import android.content.BroadcastReceiver;
+import android.content.IntentFilter;
+import android.content.Context;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class a extends Activity {
 	ListView apps;
 	TextClock time, date;
-	TextView myName;
+	TextView myName, q, au;
 	SharedPreferences sp;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setTheme(android.R.style.Theme_DeviceDefault_Wallpaper_NoTitleBar);
-		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		LinearLayout base = new LinearLayout(this);
 		RelativeLayout main = new RelativeLayout(this);
 		LinearLayout widgets = new LinearLayout(this);
@@ -53,6 +60,8 @@ public class a extends Activity {
 		time = new TextClock(this);
 		date = new TextClock(this);
 		myName = new TextView(this);
+		q = new TextView(this);
+		au = new TextView(this);
 		
 		GradientDrawable draw = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, new int[]{Color.parseColor("#10333333"), Color.parseColor("#ff333333")});
 		sp = PreferenceManager.getDefaultSharedPreferences(this);
@@ -80,6 +89,25 @@ public class a extends Activity {
 		myName.setText(sp.getString("name", "RyannKim327"));
 		myName.setTextSize(10);
 		myName.setGravity(Gravity.CENTER);
+		
+		String data = sp.getString("QUOTES", "");
+		
+		try {
+			JSONArray arr = new JSONArray(data);
+			JSONObject obj = arr.getJSONObject(0);
+			Toast.makeText(a.this, obj.getString("q"), 1).show();
+			q.setText(obj.getString("q") + "\n~"  + obj.getString("a"));
+		} catch (JSONException e) {}
+		
+		q.setTextSize(12);
+		q.setGravity(Gravity.LEFT);
+		q.setPadding(0, 5, 0, 0);
+		q.setLayoutParams(new LayoutParams(Math.round(getWindowManager().getDefaultDisplay().getWidth() * 0.7f), LayoutParams.WRAP_CONTENT));
+		
+		au.setTextSize(12);
+		au.setGravity(Gravity.RIGHT);
+		au.setPadding(0, 5, 0, 0);
+		au.setLayoutParams(new LayoutParams(Math.round(getWindowManager().getDefaultDisplay().getWidth() * 0.7f), LayoutParams.WRAP_CONTENT));
 		
 		//base.setBackground(getWallpaper());
 		base.setOrientation(LinearLayout.VERTICAL);
@@ -170,6 +198,8 @@ public class a extends Activity {
 		td.addView(time);
 		td.addView(date);
 		td.addView(myName);
+		td.addView(q);
+		td.addView(au);
 		widgets.addView(td);
 		main.addView(apps);
 		base.addView(widgets);
@@ -177,9 +207,11 @@ public class a extends Activity {
 		setContentView(base);
 		load();
 		welcome();
+		quotes();
 	}
 	void load(){
 		int color = Color.BLACK;
+		int size = 12;
 		try{
 			color = Color.parseColor(sp.getString("color", "#ff000000"));
 		}catch(Exception e){
@@ -188,7 +220,34 @@ public class a extends Activity {
 		time.setTextColor(color);
 		date.setTextColor(color);
 		myName.setTextColor(color);
+		q.setTextColor(color);
+		au.setTextColor(color);
 		myName.setText(sp.getString("name", "RyannKim327"));
+		
+		try{
+			size = Integer.parseInt(sp.getString("size", "12"));
+			if(size <= 10 || size > 25){
+				size = 12;
+				sp.edit().putString("size", "12").commit();
+			}
+		}catch(Exception e){
+			size = 12;
+		}
+		
+		if(sp.getBoolean("sb", false)){
+			getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+			getWindow().setStatusBarColor(Color.TRANSPARENT);
+			//getWindow().setStatusBarContrastEnforced(true);
+		}else{
+			getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		}
+		
+		myName.setTextSize(size);
+		date.setTextSize(size * 1.5f);
+		time.setTextSize(size * 2);
+		q.setTextSize(size);
+		au.setTextSize(size);
+		
 		new Handler().postDelayed(new Runnable(){
 				@Override
 				public void run() {
@@ -213,6 +272,21 @@ public class a extends Activity {
 			dialog.display();
 		}
 	}
+	void quotes(){
+		Date date = new Date();
+		int hours = date.getHours();
+		int mins = date.getMinutes();
+		int sec = date.getSeconds();
+		http h = new http(this, sp, q, au);
+		h.execute();
+		new Handler().postDelayed(new Runnable(){
+				@Override
+				public void run() {
+					quotes();
+				}
+		}, ((1000) * 60) * 60);
+	}
+	
 	@Override
 	public void onBackPressed() {
 		if(apps.getVisibility() == View.GONE){
