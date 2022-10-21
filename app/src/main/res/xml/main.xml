@@ -13,6 +13,12 @@
 		android:defaultValue="#ff000000" />
 	
 	<EditTextPreference
+		android:key="shadow"
+		android:title="Text shadows"
+		android:defaultValue="#ffffffff" />
+	
+	
+	<EditTextPreference
 		android:key="size"
 		android:title="Font size"
 		android:inputType="number"

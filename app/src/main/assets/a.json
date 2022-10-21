@@ -1,0 +1,25 @@
+{
+	"developer": "Ryann Kim Sesgundo",
+	"appPackageName": "mpop.revii.launcher",
+	"appName": "MPOPr2 Launcher",
+	"features":{
+		"0.1 Beta - 1": [
+			"Initialized layout",
+			"Animations",
+			"Added 3 preferences (Name, Set as Default)",
+			"Unsorted Apps list",
+			"Added Time and Date and Name"
+		],
+		"0.1 Beta - 2": [
+			"Added more preferences (Size and Colors, Statusbar, Shadows)",
+			"Sorted Applist Alphabetically (not fixed totally)",
+			"Added daily quotes (From Zenquotes.io)",
+		],
+		"0.1 Official": [
+			"Fixed Applist sorted Alphabetically",
+			"Fixed Applist minor issue (Install/Uninstall)",
+			"Added uncatch error with auto direct feedback thru server",
+			"App info for hold options"
+		]
+	}
+}

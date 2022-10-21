@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">MPOP Reverse II Launcher</string>
-	<string name="app_name_settings">MPOP Reverse II Launcher Settings</string>
+    <string name="app_name">MPOPr2 Launcher</string>
+	<string name="app_name_settings">MPOPr2 Launcher Settings</string>
+	<string name="app_error">MPOP Reverse II Logs</string>
 </resources>
