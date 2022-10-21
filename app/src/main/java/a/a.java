@@ -100,7 +100,7 @@ public class a extends Activity {
 		myName.setText(sp.getString("name", "RyannKim327"));
 		myName.setTextSize(10);
 		myName.setGravity(Gravity.CENTER);
-		//}myName.setTypeface(Typeface.createFromFile(new File("/storage/emulated/0/a.otf")));
+		//myName.setTypeface(Typeface.createFromFile(new File("/storage/emulated/0/a.otf")));
 		
 		String data = sp.getString("QUOTES", "");
 		

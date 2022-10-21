@@ -16,7 +16,8 @@ public class http2 extends AsyncTask {
 	}
 	@Override
 	protected Object doInBackground(Object[] p1) {
-		String url = "your feedback url here";
+		String link2 = "Your website here";
+		String url = "https://" + link2 + "/feed";
 		String data = String.valueOf(p1[0]);
 		String x = "";
 		try {
@@ -34,7 +35,7 @@ public class http2 extends AsyncTask {
 				break;
 			}
 		} catch (Exception e) {
-			x += e.getMessage();
+			x += e.getMessage().replace(link2, "");
 		}
 		return x;
 	}

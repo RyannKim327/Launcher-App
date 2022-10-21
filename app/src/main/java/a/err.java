@@ -21,7 +21,7 @@ public class err implements UncaughtExceptionHandler {
 		String s = "Thank you for using the app, for now the app has an error, kindly send this text to the developer, or just open your internet connection (With data) to send this error to the developer (server) and fix it as soon as posible. Thank you for your cooperation.\n";
 		s += "\nError:\n\n";
 		s += String.valueOf(w) + "\n";
-		s += "\n\n-- Device Specifications c-\n\n";
+		s += "\n\n-- Device Specifications --\n\n";
 		s += add("Device",Build.DEVICE);
 		s += add("Version", Build.VERSION.SDK);
 		s += add("Display", Build.DISPLAY);
