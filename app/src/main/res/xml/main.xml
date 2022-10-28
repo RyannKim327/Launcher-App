@@ -3,6 +3,7 @@
 	xmlns:android="http://schemas.android.com/apk/res/android">
 	
 	<EditTextPreference
+		android:singleLine="true"
 		android:key="name"
 		android:title="Your name"
 		android:defaultValue="RyannKim327" />
@@ -13,12 +14,15 @@
 		android:defaultValue="#ff000000" />
 	
 	<EditTextPreference
+		android:singleLine="true"
+		android:hint="Pattern: dx dy blur color (3 3 5 #000000)"
 		android:key="shadow"
 		android:title="Text shadows"
-		android:defaultValue="#ffffffff" />
+		android:defaultValue="3 3 5 #ffffffff" />
 	
 	
 	<EditTextPreference
+		android:singleLine="true"
 		android:key="size"
 		android:title="Font size"
 		android:inputType="number"

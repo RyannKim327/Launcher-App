@@ -2,4 +2,6 @@
 <resources>
     <style name="AppTheme" parent="@android:style/Theme.Holo.Wallpaper.NoTitleBar">
 	</style>
+	<style name="AppTheme2" parent="@android:style/Theme.Holo.Light">
+	</style>
 </resources>

@@ -6,4 +6,10 @@
         <item name="android:colorAccent">@color/colorAccent</item>
         <item name="android:navigationBarColor">?android:colorPrimary</item>
 	</style>
+	<style name="AppTheme2" parent="@android:style/Theme.DeviceDefault.Light">
+        <item name="android:colorPrimary">@color/colorPrimary</item>
+        <item name="android:colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="android:colorAccent">@color/colorAccent</item>
+        <item name="android:navigationBarColor">?android:colorPrimary</item>
+	</style>
 </resources>

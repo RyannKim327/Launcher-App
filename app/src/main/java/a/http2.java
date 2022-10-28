@@ -16,7 +16,7 @@ public class http2 extends AsyncTask {
 	}
 	@Override
 	protected Object doInBackground(Object[] p1) {
-		String link2 = "Your website here";
+		String link2 = utils.url;
 		String url = "https://" + link2 + "/feed";
 		String data = String.valueOf(p1[0]);
 		String x = "";

@@ -1,14 +1,18 @@
 package a;
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ResolveInfo;
 import android.graphics.Color;
+import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -16,6 +20,7 @@ import android.view.WindowManager;
 import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
@@ -23,25 +28,13 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextClock;
 import android.widget.TextView;
-import java.util.List;
-import android.view.View.OnTouchListener;
-import android.view.MotionEvent;
-import android.widget.Toast;
-import android.widget.ScrollView;
-import android.content.DialogInterface;
-import android.icu.util.GregorianCalendar;
 import java.util.Date;
-import android.content.BroadcastReceiver;
-import android.content.IntentFilter;
-import android.content.Context;
+import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import android.graphics.Typeface;
-import java.io.File;
-import android.widget.AdapterView.OnItemLongClickListener;
-import android.widget.Adapter;
-import android.provider.Settings;
+import java.util.regex.Pattern;
+import android.widget.Toast;
 
 public class a extends Activity {
 	ArrayAdapter<String>  str;
@@ -74,7 +67,7 @@ public class a extends Activity {
 		q = new TextView(this);
 		au = new TextView(this);
 		
-		GradientDrawable draw = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, new int[]{Color.parseColor("#10333333"), Color.parseColor("#ff333333")});
+		GradientDrawable draw = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, new int[]{Color.parseColor("#10333333"), baseColor()});//Color.parseColor("#ff333333")});
 		sp = PreferenceManager.getDefaultSharedPreferences(this);
 		
 		td.setOrientation(LinearLayout.VERTICAL);
@@ -97,7 +90,7 @@ public class a extends Activity {
 		date.setTextSize(15);
 		date.setGravity(Gravity.CENTER);
 		
-		myName.setText(sp.getString("name", "RyannKim327"));
+		myName.setText(greet(sp.getString("name", "RyannKim327")));
 		myName.setTextSize(10);
 		myName.setGravity(Gravity.CENTER);
 		//myName.setTypeface(Typeface.createFromFile(new File("/storage/emulated/0/a.otf")));
@@ -113,7 +106,7 @@ public class a extends Activity {
 		} catch (JSONException e) {}
 		
 		q.setTextSize(12);
-		q.setGravity(Gravity.LEFT);
+		q.setGravity(Gravity.FILL);
 		q.setPadding(0, 5, 0, 0);
 		q.setLayoutParams(new LayoutParams(Math.round(getWindowManager().getDefaultDisplay().getWidth() * 0.7f), LayoutParams.WRAP_CONTENT));
 		
@@ -216,7 +209,18 @@ public class a extends Activity {
 					i.addCategory(Intent.CATEGORY_DEFAULT);
 					i.setData(Uri.parse("package:" + list.get(x).activityInfo.packageName));
 					startActivity(i);
+					TranslateAnimation anim = new TranslateAnimation(0, 0, 0, getWindowManager().getDefaultDisplay().getHeight());
+					anim.setDuration(750);
+					apps.setVisibility(View.GONE);
+					apps.setAnimation(anim);
 					return false;
+				}
+			});
+		
+		base.setOnClickListener(new OnClickListener(){
+				@Override
+				public void onClick(View p1) {
+					hideMenu();
 				}
 			});
 		
@@ -232,32 +236,22 @@ public class a extends Activity {
 		setContentView(base);
 		load();
 		quotes();
+		update();
 	}
 	void load(){
 		int color = Color.BLACK;
-		int shadow = Color.WHITE;
 		int size = 12;
 		try{
 			color = Color.parseColor(sp.getString("color", "#ff000000"));
 		}catch(Exception e){
 			color = Color.DKGRAY;
 		}
-		try{
-			shadow = Color.parseColor(sp.getString("shadow", "#ff000000"));
-		}catch(Exception e){
-			shadow = Color.WHITE;
-		}
 		time.setTextColor(color);
-		time.setShadowLayer(3, 3, 3, shadow);
 		date.setTextColor(color);
-		date.setShadowLayer(3, 3, 3, shadow);
 		myName.setTextColor(color);
-		myName.setShadowLayer(3, 3, 3, shadow);
 		q.setTextColor(color);
-		q.setShadowLayer(3, 3, 3, shadow);
 		au.setTextColor(color);
-		au.setShadowLayer(3, 3, 3, shadow);
-		myName.setText(sp.getString("name", "RyannKim327"));
+		myName.setText(greet(sp.getString("name", "RyannKim327")));
 		
 		try{
 			size = Integer.parseInt(sp.getString("size", "12"));
@@ -289,12 +283,9 @@ public class a extends Activity {
 					load();
 				}
 			}, 500);
+		shades();
 	}
 	void quotes(){
-		Date date = new Date();
-		int hours = date.getHours();
-		int mins = date.getMinutes();
-		int sec = date.getSeconds();
 		http h = new http(this, sp, q, au);
 		h.execute();
 		new Handler().postDelayed(new Runnable(){
@@ -303,6 +294,16 @@ public class a extends Activity {
 					quotes();
 				}
 		}, ((1000) * 60) * 60);
+	}
+	void update(){
+		http3 h = new http3(this);
+		h.execute(getPackageName());
+		new Handler().postDelayed(new Runnable(){
+				@Override
+				public void run() {
+					update();
+				}
+			}, ((1000 * 60) * 60));
 	}
 	void apps(){
 		Intent intent = new Intent(Intent.ACTION_MAIN, (Uri) null);
@@ -375,24 +376,126 @@ public class a extends Activity {
 					int x = app[p3];
 					Intent i = getPackageManager().getLaunchIntentForPackage(list.get(x).activityInfo.packageName);
 					startActivity(i);
-					TranslateAnimation anim = new TranslateAnimation(0, 0, 0, getWindowManager().getDefaultDisplay().getHeight());
-					anim.setDuration(750);
-					apps.setVisibility(View.GONE);
-					apps.setAnimation(anim);
+					hideMenu();
 				}
 			});
 
 		apps.setOnItemLongClickListener(new OnItemLongClickListener(){
 				@Override
 				public boolean onItemLongClick(AdapterView<?> p1, View p2, int p3, long p4) {
-					int x = app[p3];
-					Intent i = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-					i.addCategory(Intent.CATEGORY_DEFAULT);
-					i.setData(Uri.parse("package:" + list.get(x).activityInfo.packageName));
-					startActivity(i);
+					final int x = app[p3];
+					AlertDialog dialog = new AlertDialog(a.this);
+					dialog.setTitle("App Details: ");
+					dialog.setMessage("App name: " + list.get(x).activityInfo.loadLabel(getPackageManager()) + "\nPackage name: " + list.get(x).activityInfo.packageName);
+					dialog.setIcon(list.get(x).activityInfo.loadIcon(getPackageManager()));
+					dialog.setPositiveButton("Uninstall", new DialogInterface.OnClickListener(){
+							@Override
+							public void onClick(DialogInterface p1, int p2) {
+								Intent i = new Intent(Intent.ACTION_DELETE);
+								i.setData(Uri.parse("package:" + list.get(x).activityInfo.packageName));
+								startActivity(i);
+							}
+						});
+					dialog.setNegativeButton("App Info", new DialogInterface.OnClickListener(){
+							@Override
+							public void onClick(DialogInterface p1, int p2) {
+								Intent i = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+								i.addCategory(Intent.CATEGORY_DEFAULT);
+								i.setData(Uri.parse("package:" + list.get(x).activityInfo.packageName));
+								startActivity(i);
+							}
+						});
+					dialog.setNeutralButton("Cancel", null);
+					dialog.setBackground(Color.parseColor("#ff333333"));
+					dialog.display();
+					hideMenu();
 					return false;
 				}
 			});
+	}
+	void hideMenu(){
+		TranslateAnimation anim = new TranslateAnimation(0, 0, 0, getWindowManager().getDefaultDisplay().getHeight());
+		anim.setDuration(750);
+		apps.setVisibility(View.GONE);
+		apps.setAnimation(anim);
+	}
+	String greet(String n){
+		String str = "";
+		Date date = new Date();
+		int h = date.getHours();
+		int m = date.getMinutes();
+		String name = "";
+		for(int i = 0; i < 20 && i < n.length(); i++){
+			name += n.charAt(i);
+		}
+		
+		if(h >= 22 && h <= 4){
+			str = "Goodnight and sweet dreams " + name;
+		}else if(h > 4 && h < 10){
+			str = "Good morning " + name;
+		}else if(h >= 10 && h <= 14){
+			str = "Let's eat " + name;
+		}else if(h > 14 && h <= 16){
+			str = "Good afternoon " + name;
+		}else{
+			str = "Good evening " + name;
+		}
+		
+		return str;
+	}
+	int baseColor(){
+		Drawable t = getWallpaper();
+		return Color.parseColor("#40333333");
+	}
+	void shades(){
+		int x = 0;
+		int y = 0;
+		int b = 0;
+		int c = 0;
+		
+		String[] s = sp.getString("shadow", "#ff000000").split(" ");
+		
+		try{
+			if(s.length == 4){
+				x = Integer.parseInt(s[0]);
+				y = Integer.parseInt(s[1]);
+				b = Integer.parseInt(s[2]);
+				c = checkColor(s[3]);
+			}else if(s.length == 3){
+				x = Integer.parseInt(s[0]);
+				y = Integer.parseInt(s[0]);
+				b = Integer.parseInt(s[1]);
+				c = checkColor(s[2]);
+			}else if(s.length == 2){
+				x = Integer.parseInt(s[0]);
+				y = Integer.parseInt(s[0]);
+				b = Integer.parseInt(s[0]);
+				c = checkColor(s[1]);
+			}else{
+				x = 0;
+				y = 0;
+				b = 3;
+				c = Color.WHITE;
+			}
+		}catch(Exception e){
+			x = 0;
+			y = 0;
+			b = 3;
+			c = Color.WHITE;
+		}
+		
+		time.setShadowLayer(b, x, y, c);
+		date.setShadowLayer(b, x, y, c);
+		myName.setShadowLayer(b, x, y, c);
+		q.setShadowLayer(b, x, y, c);
+		au.setShadowLayer(b, x, y, c);
+	}
+	int checkColor(String color){
+		try{
+			return Color.parseColor(color);
+		}catch(Exception e){
+			return Color.WHITE;
+		}
 	}
 	@Override
 	public void onBackPressed() {
@@ -403,10 +506,7 @@ public class a extends Activity {
 			apps.setVisibility(View.VISIBLE);
 			apps.setAnimation(anim);
 		}else{
-			TranslateAnimation anim = new TranslateAnimation(0, 0, 0, getWindowManager().getDefaultDisplay().getHeight());
-			anim.setDuration(750);
-			apps.setVisibility(View.GONE);
-			apps.setAnimation(anim);
+			hideMenu();
 		}
 	}
 }

@@ -1,15 +1,16 @@
 package a;
 import android.content.Context;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Reader;
+import android.content.pm.PackageManager;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
-import org.json.JSONObject;
-import org.json.JSONException;
+import java.io.Reader;
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class utils {
+	public static String url = "enter your website here";
 	public static String readAsset(Context c , String file){
 		StringBuffer str = new StringBuffer();
 		try {
@@ -28,7 +29,7 @@ public class utils {
 	}
 	public class JSON{
 		JSONObject o;
-		public JSON(String txt){
+		public final JSON(String txt){
 			try {
 				o = new JSONObject(txt);
 			} catch (JSONException e) {}
@@ -47,5 +48,12 @@ public class utils {
 			} catch (JSONException e) {}
 			return s;
 		}
+	}
+	public static String vName(Context ctx){
+		String str = "";
+		try {
+			str = ctx.getPackageManager().getPackageInfo(ctx.getPackageName(), 0).versionName;
+		} catch (PackageManager.NameNotFoundException e) {}
+		return str;
 	}
 }

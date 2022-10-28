@@ -19,6 +19,7 @@ public class err implements UncaughtExceptionHandler {
 		Writer w = new StringWriter();
 		p2.printStackTrace(new PrintWriter(w));
 		String s = "Thank you for using the app, for now the app has an error, kindly send this text to the developer, or just open your internet connection (With data) to send this error to the developer (server) and fix it as soon as posible. Thank you for your cooperation.\n";
+		String dev = "";
 		s += "\nError:\n\n";
 		s += String.valueOf(w) + "\n";
 		s += "\n\n-- Device Specifications --\n\n";
@@ -26,6 +27,13 @@ public class err implements UncaughtExceptionHandler {
 		s += add("Version", Build.VERSION.SDK);
 		s += add("Display", Build.DISPLAY);
 		s += add("Bootloader", Build.BOOTLOADER);
+		
+		dev += String.valueOf(w) + "\n\n";
+		dev += add("Device",Build.DEVICE);
+		dev += add("Version", Build.VERSION.SDK);
+		dev += add("Display", Build.DISPLAY);
+		dev += add("Model", Build.MODEL);
+		dev += add("Bootloader", Build.BOOTLOADER);
 		
 		try{
 			Intent i = new Intent(a, c.class);
