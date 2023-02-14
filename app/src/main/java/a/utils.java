@@ -10,7 +10,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class utils {
-	public static String url = "enter your website here";
+	public static String url = "mywebsite1.mpoprevii.repl.co";
 	public static String readAsset(Context c , String file){
 		StringBuffer str = new StringBuffer();
 		try {

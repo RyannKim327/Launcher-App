@@ -9,6 +9,7 @@ public class d extends Activity {
 	@Override
 	public void onCreate(Bundle bundle){
 		super.onCreate(bundle);
+		Thread.setDefaultUncaughtExceptionHandler(new err(this));
 		new Handler().postDelayed(new Runnable(){
 				@Override
 				public void run() {

@@ -1,11 +1,12 @@
 package a;
+import android.Manifest;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Color;
-import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
@@ -28,13 +29,12 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextClock;
 import android.widget.TextView;
+import android.widget.Toast;
 import java.util.Date;
 import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import java.util.regex.Pattern;
-import android.widget.Toast;
 
 public class a extends Activity {
 	ArrayAdapter<String>  str;
@@ -50,6 +50,10 @@ public class a extends Activity {
 		setTheme(android.R.style.Theme_DeviceDefault_Wallpaper_NoTitleBar);
 		
 		Thread.setDefaultUncaughtExceptionHandler(new err(this));
+		
+		if(checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+			requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 0);
+		}
 		
 		LinearLayout base = new LinearLayout(this);
 		RelativeLayout main = new RelativeLayout(this);
@@ -182,6 +186,7 @@ public class a extends Activity {
 					str.add(app_[i].toString());
 				}
 			}
+			
 		}
 		
 		apps.setBackgroundDrawable(draw);
@@ -359,14 +364,15 @@ public class a extends Activity {
 				}else{
 					str.add(app_[i].toString());
 				}
-			}
-			if(i == 0){
+			}else if(i == 0){
 				if(app_[i].equals(app_[i + 1])){
 					String pack = list.get(app[i]).activityInfo.packageName;
 					str.add(app_[i].toString() + " (" + pack + ")");
 				}else{
 					str.add(app_[i].toString());
 				}
+			}else{
+				str.add(app_[i].toString());
 			}
 		}
 		apps.setAdapter(str);
@@ -377,6 +383,7 @@ public class a extends Activity {
 					Intent i = getPackageManager().getLaunchIntentForPackage(list.get(x).activityInfo.packageName);
 					startActivity(i);
 					hideMenu();
+					finish();
 				}
 			});
 
@@ -394,6 +401,7 @@ public class a extends Activity {
 								Intent i = new Intent(Intent.ACTION_DELETE);
 								i.setData(Uri.parse("package:" + list.get(x).activityInfo.packageName));
 								startActivity(i);
+								finish();
 							}
 						});
 					dialog.setNegativeButton("App Info", new DialogInterface.OnClickListener(){
@@ -403,6 +411,7 @@ public class a extends Activity {
 								i.addCategory(Intent.CATEGORY_DEFAULT);
 								i.setData(Uri.parse("package:" + list.get(x).activityInfo.packageName));
 								startActivity(i);
+								finish();
 							}
 						});
 					dialog.setNeutralButton("Cancel", null);
@@ -508,5 +517,16 @@ public class a extends Activity {
 		}else{
 			hideMenu();
 		}
+	}
+	@Override
+	public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+		switch(requestCode){
+			case 0:
+				if(grantResults.length > 0 & grantResults[0] == PackageManager.PERMISSION_GRANTED){
+					Toast.makeText(this, "Thank you", 1).show();
+				}
+			break;
+		}
+		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 	}
 }

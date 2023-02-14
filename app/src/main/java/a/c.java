@@ -9,6 +9,7 @@ public class c extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		Thread.setDefaultUncaughtExceptionHandler(new err(this));
 		setTheme(android.R.style.Theme_DeviceDefault_Light);
 		ScrollView base = new ScrollView(this);
 		TextView tv = new TextView(this);

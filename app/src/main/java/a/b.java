@@ -8,6 +8,8 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.widget.Toast;
 import mpop.revii.launcher.R;
+import android.content.pm.PackageManager;
+import android.Manifest;
 
 public class b extends PreferenceActivity {
 	@Override
@@ -46,6 +48,9 @@ public class b extends PreferenceActivity {
 					}
 				});
 		}
+		if(checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+			requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 0);
+		}
 	}
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -60,5 +65,16 @@ public class b extends PreferenceActivity {
 			break;*/
 		}
 		super.onActivityResult(requestCode, resultCode, data);
+	}
+	@Override
+	public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+		switch(requestCode){
+			case 0:
+				if(grantResults.length > 0 & grantResults[0] == PackageManager.PERMISSION_GRANTED){
+					Toast.makeText(b.this, "Thank you", 1).show();
+				}
+			break;
+		}
+		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 	}
 }
