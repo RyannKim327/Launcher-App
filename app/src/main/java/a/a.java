@@ -383,7 +383,7 @@ public class a extends Activity {
 					Intent i = getPackageManager().getLaunchIntentForPackage(list.get(x).activityInfo.packageName);
 					startActivity(i);
 					hideMenu();
-					finish();
+					finishAndRemoveTask();
 				}
 			});
 
@@ -401,7 +401,6 @@ public class a extends Activity {
 								Intent i = new Intent(Intent.ACTION_DELETE);
 								i.setData(Uri.parse("package:" + list.get(x).activityInfo.packageName));
 								startActivity(i);
-								finish();
 							}
 						});
 					dialog.setNegativeButton("App Info", new DialogInterface.OnClickListener(){
@@ -411,7 +410,7 @@ public class a extends Activity {
 								i.addCategory(Intent.CATEGORY_DEFAULT);
 								i.setData(Uri.parse("package:" + list.get(x).activityInfo.packageName));
 								startActivity(i);
-								finish();
+								finishAndRemoveTask();
 							}
 						});
 					dialog.setNeutralButton("Cancel", null);

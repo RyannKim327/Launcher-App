@@ -8,7 +8,11 @@ git clone https://github.com/RyannKim327/Launcher-App.git
 ```
 
 > As respect, don't remove or modify any credits that I added to this code. Also, don't add my name in any platform and any type of credits. It is free and you may legally use as if you don't sell my code. This is an open-source application, that everyone can enjoy.
+---
+### New in the current code
+* Fixed Minor Issue about menu (All Apps Showed)
 
+---
 ### Credits
 1. Ronald Torrejos Limpiado
 2. John Roy Lapida Calimlim
@@ -22,3 +26,4 @@ git clone https://github.com/RyannKim327/Launcher-App.git
 10. Replit (for hosting my server aide)
 11. Stackoverflow
 12. Github
+
