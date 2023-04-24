@@ -35,14 +35,17 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import java.util.ArrayList;
 
 public class a extends Activity {
-	ArrayAdapter<String>  str;
+	lists str;
 	List<ResolveInfo> list;
 	ListView apps;
 	TextClock time, date;
 	TextView myName, q, au;
 	SharedPreferences sp;
+	LinearLayout base;
+	ArrayList<Object> lists;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -55,14 +58,15 @@ public class a extends Activity {
 			requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 0);
 		}
 		
-		LinearLayout base = new LinearLayout(this);
+		base = new LinearLayout(this);
 		RelativeLayout main = new RelativeLayout(this);
 		LinearLayout widgets = new LinearLayout(this);
 		Intent intent = new Intent(Intent.ACTION_MAIN, (Uri) null);
 		intent.addCategory(Intent.CATEGORY_LAUNCHER);
 		list = getPackageManager().queryIntentActivities(intent, 0);
 		apps = new ListView(this);
-		str = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
+		lists = new ArrayList<Object>();
+		str = new lists(this, lists);
 		
 		LinearLayout td = new LinearLayout(this);
 		time = new TextClock(this);
@@ -170,7 +174,7 @@ public class a extends Activity {
 		}
 		
 		for(int i = 0; i < app_.length; i++){
-			if(i < app_.length - 1 && i > 0){
+			/*if(i < app_.length - 1 && i > 0){
 				if(app_[i].equals(app_[i + 1]) || app_[i - 1].equals(app_[i])){
 					String pack = list.get(app[i]).activityInfo.packageName;
 					str.add(app_[i].toString() + " (" + pack + ")");
@@ -180,13 +184,15 @@ public class a extends Activity {
 			}
 			if(i == 0){
 				if(app_[i].equals(app_[i + 1])){
+			
 					String pack = list.get(app[i]).activityInfo.packageName;
 					str.add(app_[i].toString() + " (" + pack + ")");
 				}else{
 					str.add(app_[i].toString());
 				}
 			}
-			
+			*/
+			lists.add(list.get(app[i]));
 		}
 		
 		apps.setBackgroundDrawable(draw);
@@ -357,7 +363,7 @@ public class a extends Activity {
 		}
 
 		for(int i = 0; i < app_.length; i++){
-			if(i < app_.length - 1 && i > 0){
+			/*if(i < app_.length - 1 && i > 0){
 				if(app_[i].equals(app_[i + 1]) || app_[i - 1].equals(app_[i])){
 					String pack = list.get(app[i]).activityInfo.packageName;
 					str.add(app_[i].toString() + " (" + pack + ")");
@@ -373,7 +379,8 @@ public class a extends Activity {
 				}
 			}else{
 				str.add(app_[i].toString());
-			}
+			}*/
+			lists.add(list.get(app[i]));
 		}
 		apps.setAdapter(str);
 		apps.setOnItemClickListener(new OnItemClickListener(){
@@ -386,6 +393,7 @@ public class a extends Activity {
 					finishAndRemoveTask();
 				}
 			});
+			
 
 		apps.setOnItemLongClickListener(new OnItemLongClickListener(){
 				@Override
@@ -410,14 +418,13 @@ public class a extends Activity {
 								i.addCategory(Intent.CATEGORY_DEFAULT);
 								i.setData(Uri.parse("package:" + list.get(x).activityInfo.packageName));
 								startActivity(i);
-								finishAndRemoveTask();
 							}
 						});
 					dialog.setNeutralButton("Cancel", null);
 					dialog.setBackground(Color.parseColor("#ff333333"));
 					dialog.display();
 					hideMenu();
-					return false;
+					return true;
 				}
 			});
 	}
@@ -426,6 +433,7 @@ public class a extends Activity {
 		anim.setDuration(750);
 		apps.setVisibility(View.GONE);
 		apps.setAnimation(anim);
+		base.setBackgroundColor(Color.TRANSPARENT);
 	}
 	String greet(String n){
 		String str = "";
@@ -513,6 +521,7 @@ public class a extends Activity {
 			anim.setDuration(750);
 			apps.setVisibility(View.VISIBLE);
 			apps.setAnimation(anim);
+			base.setBackgroundColor(Color.parseColor("#90000000"));
 		}else{
 			hideMenu();
 		}

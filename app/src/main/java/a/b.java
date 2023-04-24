@@ -21,18 +21,17 @@ public class b extends PreferenceActivity {
 		addPreferencesFromResource(R.xml.main);
 		final Preference pref = findPreference("def");
 		
-		final Intent i = new Intent(Intent.ACTION_MAIN);
-		i.setAction(Intent.ACTION_MAIN);
-		i.addCategory(Intent.CATEGORY_HOME);
-		if(!getPackageManager().resolveActivity(i, 0).activityInfo.packageName.equalsIgnoreCase(getPackageName())){
+		final Intent intent = new Intent();
+		intent.setAction(Intent.ACTION_MAIN);
+		intent.addCategory(Intent.CATEGORY_HOME);
+		
+		if(!getPackageManager().resolveActivity(intent, 0).activityInfo.packageName.equalsIgnoreCase(getPackageName())){
 			pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener(){
 					@Override
 					public boolean onPreferenceClick(Preference p1) {
-						//Intent intent = new Intent(Intent.ACTION_MAIN);
-						//intent.addCategory(Intent.CATEGORY_HOME);
-						i.addCategory(Intent.CATEGORY_DEFAULT);
-						i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-						startActivity(Intent.createChooser(i, "Choose your application:"));
+						// i.addCategory(Intent.CATEGORY_DEFAULT);
+						intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+						startActivity(Intent.createChooser(intent, ""));
 						return false;
 					}
 				});
@@ -48,6 +47,36 @@ public class b extends PreferenceActivity {
 					}
 				});
 		}
+		
+		/*final Intent in = new Intent(Intent.ACTION_MAIN);
+		in.setAction(Intent.ACTION_MAIN);
+		in.addCategory(Intent.CATEGORY_HOME);
+		if(!getPackageManager().resolveActivity(in, 0).activityInfo.packageName.equalsIgnoreCase(getPackageName())){
+			pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener(){
+					@Override
+					public boolean onPreferenceClick(Preference p1) {
+						Intent intent = new Intent();
+						intent.setAction(Intent.ACTION_MAIN);
+						intent.addCategory(Intent.CATEGORY_HOME);
+						intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+						startActivity(Intent.createChooser(intent, "Choose", null));
+						// startActivity(intent);
+						return false;
+					}
+				});
+		}else{
+			pref.setTitle("Open Main Activity");
+			pref.setSummary("Activated already");
+			pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener(){
+					@Override
+					public boolean onPreferenceClick(Preference p1) {
+						startActivity(new Intent(b.this, a.class));
+						finish();
+						return false;
+					}
+				});
+		}*/
+		
 		if(checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
 			requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 0);
 		}
@@ -56,13 +85,15 @@ public class b extends PreferenceActivity {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		switch(requestCode){
 			// No action
-			/*case 0:
+			case 0:
 				if(resultCode == RESULT_OK){
-					if(data.getPackage().equals(getPackageName())){
-						startActivity(new Intent(b.this, a.class));
+					
+					if(data.getPackage().equalsIgnoreCase(getPackageName())){
+						//startActivity(new Intent(b.this, a.class));
+						Toast.makeText(this, "Thank you", 1).show();
 					}
 				}
-			break;*/
+			break;
 		}
 		super.onActivityResult(requestCode, resultCode, data);
 	}
