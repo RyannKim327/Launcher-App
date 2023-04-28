@@ -20,6 +20,10 @@
 		android:title="Text shadows"
 		android:defaultValue="3 3 5 #ffffffff" />
 	
+	<EditTextPreference
+		android:hint="Quotes\n~ Author"
+		android:key="c_quotes"
+		android:title="Custom Quotes" />
 	
 	<EditTextPreference
 		android:singleLine="true"

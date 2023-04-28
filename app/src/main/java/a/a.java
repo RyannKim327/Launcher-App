@@ -77,7 +77,7 @@ public class a extends Activity {
 		
 		GradientDrawable draw = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, new int[]{Color.parseColor("#10333333"), baseColor()});//Color.parseColor("#ff333333")});
 		sp = PreferenceManager.getDefaultSharedPreferences(this);
-		
+		String customQuotes = sp.getString("c_quotes", "");
 		td.setOrientation(LinearLayout.VERTICAL);
 		td.setGravity(Gravity.CENTER);
 		td.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
@@ -105,13 +105,23 @@ public class a extends Activity {
 		
 		String data = sp.getString("QUOTES", "");
 		
-		try {
-			JSONArray arr = new JSONArray(data);
-			JSONObject obj = arr.getJSONObject(0);
-			//Toast.makeText(a.this, obj.getString("q"), 1).show();
-			q.setText(obj.getString("q"));
-			au.setText("~ " + obj.getString("a"));
-		} catch (JSONException e) {}
+		if(customQuotes.equalsIgnoreCase("") || customQuotes.split("\n").length <= 0){
+			try {
+				JSONArray arr = new JSONArray(data);
+				JSONObject obj = arr.getJSONObject(0);
+				//Toast.makeText(a.this, obj.getString("q"), 1).show();
+				q.setText(obj.getString("q"));
+				au.setText("~ " + obj.getString("a"));
+			} catch (JSONException e) {}
+		}else{
+			String author = customQuotes.split("\n")[customQuotes.split("\n").length - 1];
+			String quotes = "";
+			for(int i = 0; i < customQuotes.split("\n").length - 1; i++){
+				quotes += customQuotes.split("\n")[i] + "\n";
+			}
+			q.setText(quotes);
+			au.setText("~ " + author);
+		}
 		
 		q.setTextSize(12);
 		q.setGravity(Gravity.FILL);
@@ -174,24 +184,6 @@ public class a extends Activity {
 		}
 		
 		for(int i = 0; i < app_.length; i++){
-			/*if(i < app_.length - 1 && i > 0){
-				if(app_[i].equals(app_[i + 1]) || app_[i - 1].equals(app_[i])){
-					String pack = list.get(app[i]).activityInfo.packageName;
-					str.add(app_[i].toString() + " (" + pack + ")");
-				}else{
-					str.add(app_[i].toString());
-				}
-			}
-			if(i == 0){
-				if(app_[i].equals(app_[i + 1])){
-			
-					String pack = list.get(app[i]).activityInfo.packageName;
-					str.add(app_[i].toString() + " (" + pack + ")");
-				}else{
-					str.add(app_[i].toString());
-				}
-			}
-			*/
 			lists.add(list.get(app[i]));
 		}
 		
@@ -200,40 +192,40 @@ public class a extends Activity {
 		apps.setVisibility(View.GONE);
 		apps.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 		apps.setOnItemClickListener(new OnItemClickListener(){
-				@Override
-				public void onItemClick(AdapterView<?> p1, View p2, int p3, long p4) {
-					int x = app[p3];
-					Intent i = getPackageManager().getLaunchIntentForPackage(list.get(x).activityInfo.packageName);
-					startActivity(i);
-					TranslateAnimation anim = new TranslateAnimation(0, 0, 0, getWindowManager().getDefaultDisplay().getHeight());
-					anim.setDuration(750);
-					apps.setVisibility(View.GONE);
-					apps.setAnimation(anim);
-				}
-			});
+			@Override
+			public void onItemClick(AdapterView<?> p1, View p2, int p3, long p4) {
+				int x = app[p3];
+				Intent i = getPackageManager().getLaunchIntentForPackage(list.get(x).activityInfo.packageName);
+				startActivity(i);
+				TranslateAnimation anim = new TranslateAnimation(0, 0, 0, getWindowManager().getDefaultDisplay().getHeight());
+				anim.setDuration(750);
+				apps.setVisibility(View.GONE);
+				apps.setAnimation(anim);
+			}
+		});
 		
 		apps.setOnItemLongClickListener(new OnItemLongClickListener(){
-				@Override
-				public boolean onItemLongClick(AdapterView<?> p1, View p2, int p3, long p4) {
-					int x = app[p3];
-					Intent i = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-					i.addCategory(Intent.CATEGORY_DEFAULT);
-					i.setData(Uri.parse("package:" + list.get(x).activityInfo.packageName));
-					startActivity(i);
-					TranslateAnimation anim = new TranslateAnimation(0, 0, 0, getWindowManager().getDefaultDisplay().getHeight());
-					anim.setDuration(750);
-					apps.setVisibility(View.GONE);
-					apps.setAnimation(anim);
-					return false;
-				}
-			});
+			@Override
+			public boolean onItemLongClick(AdapterView<?> p1, View p2, int p3, long p4) {
+				int x = app[p3];
+				Intent i = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+				i.addCategory(Intent.CATEGORY_DEFAULT);
+				i.setData(Uri.parse("package:" + list.get(x).activityInfo.packageName));
+				startActivity(i);
+				TranslateAnimation anim = new TranslateAnimation(0, 0, 0, getWindowManager().getDefaultDisplay().getHeight());
+				anim.setDuration(750);
+				apps.setVisibility(View.GONE);
+				apps.setAnimation(anim);
+				return false;
+			}
+		});
 		
 		base.setOnClickListener(new OnClickListener(){
-				@Override
-				public void onClick(View p1) {
-					hideMenu();
-				}
-			});
+			@Override
+			public void onClick(View p1) {
+				hideMenu();
+			}
+		});
 		
 		td.addView(time);
 		td.addView(date);
@@ -363,23 +355,6 @@ public class a extends Activity {
 		}
 
 		for(int i = 0; i < app_.length; i++){
-			/*if(i < app_.length - 1 && i > 0){
-				if(app_[i].equals(app_[i + 1]) || app_[i - 1].equals(app_[i])){
-					String pack = list.get(app[i]).activityInfo.packageName;
-					str.add(app_[i].toString() + " (" + pack + ")");
-				}else{
-					str.add(app_[i].toString());
-				}
-			}else if(i == 0){
-				if(app_[i].equals(app_[i + 1])){
-					String pack = list.get(app[i]).activityInfo.packageName;
-					str.add(app_[i].toString() + " (" + pack + ")");
-				}else{
-					str.add(app_[i].toString());
-				}
-			}else{
-				str.add(app_[i].toString());
-			}*/
 			lists.add(list.get(app[i]));
 		}
 		apps.setAdapter(str);
