@@ -108,4 +108,14 @@ public class b extends PreferenceActivity {
 		}
 		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 	}
+
+	@Override
+	protected void onPause() {
+		finish();
+	}
+
+	@Override
+	protected void onDestroy() {
+		finish();
+	}
 }
