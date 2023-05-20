@@ -269,7 +269,6 @@ public class a extends Activity {
 		if(sp.getBoolean("sb", false)){
 			getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 			getWindow().setStatusBarColor(Color.TRANSPARENT);
-			//getWindow().setStatusBarContrastEnforced(true);
 		}else{
 			getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		}
