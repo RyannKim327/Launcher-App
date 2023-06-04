@@ -112,10 +112,12 @@ public class b extends PreferenceActivity {
 	@Override
 	protected void onPause() {
 		finish();
+		super.onPause();
 	}
 
 	@Override
 	protected void onDestroy() {
 		finish();
+		super.onDestroy();
 	}
 }
