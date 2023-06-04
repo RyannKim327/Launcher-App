@@ -25,6 +25,12 @@
 			"Added options on app hold activity",
 			"Hide menu on screen click",
 			"Customizable x and y also blur on shadows"
+		],
+		"0.3": [
+			"New Icon",
+			"Added Popup Menu for app menu",
+			"Fixed minor issue on launcher click",
+			"Added Icon on lists"
 		]
 	}
 }
