@@ -36,6 +36,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.ArrayList;
+import android.graphics.Typeface;
 
 public class a extends Activity {
 	lists str;
@@ -92,11 +93,13 @@ public class a extends Activity {
 		time.setFormat24Hour("kk:mm:ss");
 		time.setTextSize(30);
 		time.setGravity(Gravity.CENTER);
+		time.setTypeface(Typeface.createFromAsset(getAssets(), "digital-7.ttf"));
 		
 		date.setFormat12Hour("EEE dd, MMM, yyyy");
 		date.setFormat24Hour("EEE dd, MMM, yyyy");
 		date.setTextSize(15);
 		date.setGravity(Gravity.CENTER);
+		date.setTypeface(Typeface.createFromAsset(getAssets(), "digital-7.ttf"));
 		
 		myName.setText(greet(sp.getString("name", "RyannKim327")));
 		myName.setTextSize(10);
@@ -224,6 +227,23 @@ public class a extends Activity {
 			@Override
 			public void onClick(View p1) {
 				hideMenu();
+			}
+		});
+		
+		base.setOnTouchListener(new swiper(this){
+			@Override
+			public void onSwipeBottom() {
+			}
+			@Override
+			public void onSwipeLeft() {
+			}
+			@Override
+			public void onSwipeRight() {
+			}
+			@Override
+			public void onSwipeTop(){
+				showOnMenu();
+				// Toast.makeText(a.this, "Test to top", 1).show();
 			}
 		});
 		
@@ -487,8 +507,7 @@ public class a extends Activity {
 			return Color.WHITE;
 		}
 	}
-	@Override
-	public void onBackPressed() {
+	void showOnMenu(){
 		if(apps.getVisibility() == View.GONE){
 			apps();
 			TranslateAnimation anim = new TranslateAnimation(0, 0, getWindowManager().getDefaultDisplay().getHeight(), 0);
@@ -499,6 +518,10 @@ public class a extends Activity {
 		}else{
 			hideMenu();
 		}
+	}
+	@Override
+	public void onBackPressed() {
+		showOnMenu();
 	}
 	@Override
 	public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {

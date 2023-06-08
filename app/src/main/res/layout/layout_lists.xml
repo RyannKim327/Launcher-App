@@ -24,6 +24,7 @@
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:text="AppName"
+			android:textColor="#ffffff"
 			android:textAppearance="?android:attr/textAppearanceMedium"
 			android:id="@+id/appName"/>
 
@@ -32,6 +33,7 @@
 			android:layout_height="wrap_content"
 			android:text="mpop.revii.launcher"
 			android:layout_marginLeft="10dp"
+			android:textColor="#ffffff"
 			android:id="@+id/packageName"
 			android:textSize="12sp"/>
 

@@ -1,6 +1,8 @@
 package a;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -8,8 +10,6 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.widget.Toast;
 import mpop.revii.launcher.R;
-import android.content.pm.PackageManager;
-import android.Manifest;
 
 public class b extends PreferenceActivity {
 	@Override
@@ -24,14 +24,12 @@ public class b extends PreferenceActivity {
 		final Intent intent = new Intent();
 		intent.setAction(Intent.ACTION_MAIN);
 		intent.addCategory(Intent.CATEGORY_HOME);
-		
 		if(!getPackageManager().resolveActivity(intent, 0).activityInfo.packageName.equalsIgnoreCase(getPackageName())){
 			pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener(){
 					@Override
 					public boolean onPreferenceClick(Preference p1) {
-						// i.addCategory(Intent.CATEGORY_DEFAULT);
-						intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-						startActivity(Intent.createChooser(intent, ""));
+						intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+						startActivity(Intent.createChooser(intent, "Select Application", null));
 						return false;
 					}
 				});
@@ -80,22 +78,6 @@ public class b extends PreferenceActivity {
 		if(checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
 			requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 0);
 		}
-	}
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		switch(requestCode){
-			// No action
-			case 0:
-				if(resultCode == RESULT_OK){
-					
-					if(data.getPackage().equalsIgnoreCase(getPackageName())){
-						//startActivity(new Intent(b.this, a.class));
-						Toast.makeText(this, "Thank you", 1).show();
-					}
-				}
-			break;
-		}
-		super.onActivityResult(requestCode, resultCode, data);
 	}
 	@Override
 	public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
