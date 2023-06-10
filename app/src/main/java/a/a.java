@@ -233,6 +233,9 @@ public class a extends Activity {
 		base.setOnTouchListener(new swiper(this){
 			@Override
 			public void onSwipeBottom() {
+				if(apps.getVisibility() == View.VISIBLE){
+					hideMenu();
+				}
 			}
 			@Override
 			public void onSwipeLeft() {
