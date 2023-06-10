@@ -8,8 +8,6 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -29,7 +27,6 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextClock;
 import android.widget.TextView;
-import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -75,7 +72,6 @@ public class a extends Activity {
 		q = new TextView(this);
 		au = new TextView(this);
 		
-		GradientDrawable draw = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, new int[]{Color.parseColor("#10333333"), baseColor()});//Color.parseColor("#ff333333")});
 		sp = PreferenceManager.getDefaultSharedPreferences(this);
 		String customQuotes = sp.getString("c_quotes", "");
 		td.setOrientation(LinearLayout.VERTICAL);
@@ -107,7 +103,6 @@ public class a extends Activity {
 		myName.setText(greet(sp.getString("name", "RyannKim327")));
 		myName.setTextSize(10);
 		myName.setGravity(Gravity.CENTER);
-		//myName.setTypeface(Typeface.createFromFile(new File("/storage/emulated/0/a.otf")));
 		
 		String data = sp.getString("QUOTES", "");
 		
@@ -115,7 +110,6 @@ public class a extends Activity {
 			try {
 				JSONArray arr = new JSONArray(data);
 				JSONObject obj = arr.getJSONObject(0);
-				//Toast.makeText(a.this, obj.getString("q"), 1).show();
 				q.setText(obj.getString("q"));
 				au.setText("~ " + obj.getString("a"));
 			} catch (JSONException e) {}
@@ -139,7 +133,6 @@ public class a extends Activity {
 		au.setPadding(0, 5, 0, 0);
 		au.setLayoutParams(new LayoutParams(Math.round(getWindowManager().getDefaultDisplay().getWidth() * 0.7f), LayoutParams.WRAP_CONTENT));
 		
-		//base.setBackground(getWallpaper());
 		base.setOrientation(LinearLayout.VERTICAL);
 		base.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 		
@@ -149,82 +142,6 @@ public class a extends Activity {
 		
 		main.setGravity(Gravity.BOTTOM | Gravity.CENTER);
 		main.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-		
-		final int[] app = new int[list.size()];
-		String[] app_ = new String[list.size()];
-		for(int i = 0; i < list.size(); i++){
-			String name = list.get(i).activityInfo.loadLabel(getPackageManager()).toString();
-			app_[i] = name;
-			app[i] = i;
-		}
-		
-		for(int i = 0; i < app_.length; i++){
-			for(int j = 0; j < i; j++){
-				char a = app_[i].toLowerCase().charAt(0);
-				char b = app_[j].toLowerCase().charAt(0);
-				if(a < b){
-					String c = app_[i];
-					int d = app[i];
-					app_[i] = app_[j];
-					app[i] = app[j];
-					app_[j] = c;
-					app[j] = d;
-				}
-				int k = 0;
-				a = app_[i].toLowerCase().charAt(k);
-				b = app_[j].toLowerCase().charAt(k);
-				while(a == b && (k < app_[i].length() - 1 && k < app_[j].length() - 1)){
-					k++;
-					a = app_[i].toLowerCase().charAt(k);
-					b = app_[j].toLowerCase().charAt(k);
-					if(a < b){
-						String c = app_[i];
-						int d = app[i];
-						app_[i] = app_[j];
-						app[i] = app[j];
-						app_[j] = c;
-						app[j] = d;
-					}
-				}
-			}
-		}
-		
-		for(int i = 0; i < app_.length; i++){
-			lists.add(list.get(app[i]));
-		}
-		
-		apps.setBackgroundDrawable(draw);
-		apps.setAdapter(str);
-		apps.setVisibility(View.GONE);
-		apps.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-		apps.setOnItemClickListener(new OnItemClickListener(){
-			@Override
-			public void onItemClick(AdapterView<?> p1, View p2, int p3, long p4) {
-				int x = app[p3];
-				Intent i = getPackageManager().getLaunchIntentForPackage(list.get(x).activityInfo.packageName);
-				startActivity(i);
-				TranslateAnimation anim = new TranslateAnimation(0, 0, 0, getWindowManager().getDefaultDisplay().getHeight());
-				anim.setDuration(750);
-				apps.setVisibility(View.GONE);
-				apps.setAnimation(anim);
-			}
-		});
-		
-		apps.setOnItemLongClickListener(new OnItemLongClickListener(){
-			@Override
-			public boolean onItemLongClick(AdapterView<?> p1, View p2, int p3, long p4) {
-				int x = app[p3];
-				Intent i = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-				i.addCategory(Intent.CATEGORY_DEFAULT);
-				i.setData(Uri.parse("package:" + list.get(x).activityInfo.packageName));
-				startActivity(i);
-				TranslateAnimation anim = new TranslateAnimation(0, 0, 0, getWindowManager().getDefaultDisplay().getHeight());
-				anim.setDuration(750);
-				apps.setVisibility(View.GONE);
-				apps.setAnimation(anim);
-				return false;
-			}
-		});
 		
 		base.setOnClickListener(new OnClickListener(){
 			@Override
@@ -249,7 +166,6 @@ public class a extends Activity {
 			@Override
 			public void onSwipeTop(){
 				showOnMenu();
-				// Toast.makeText(a.this, "Test to top", 1).show();
 			}
 		});
 		
@@ -439,13 +355,12 @@ public class a extends Activity {
 		String str = "";
 		Date date = new Date();
 		int h = date.getHours();
-		int m = date.getMinutes();
 		String name = "";
 		for(int i = 0; i < 20 && i < n.length(); i++){
 			name += n.charAt(i);
 		}
 		
-		if(h >= 22 && h <= 4){
+		if(h >= 22 || h <= 4){
 			str = "Goodnight and sweet dreams " + name;
 		}else if(h > 4 && h < 10){
 			str = "Good morning " + name;
@@ -453,16 +368,13 @@ public class a extends Activity {
 			str = "Let's eat " + name;
 		}else if(h > 14 && h <= 16){
 			str = "Good afternoon " + name;
-		}else{
+		}else if(h > 16 && h <= 22){
 			str = "Good evening " + name;
 		}
 		
 		return str;
 	}
-	int baseColor(){
-		Drawable t = getWallpaper();
-		return Color.parseColor("#40333333");
-	}
+	
 	void shades(){
 		int x = 0;
 		int y = 0;
@@ -534,7 +446,7 @@ public class a extends Activity {
 		switch(requestCode){
 			case 0:
 				if(grantResults.length > 0 & grantResults[0] == PackageManager.PERMISSION_GRANTED){
-					Toast.makeText(this, "Thank you", 1).show();
+					Toast.makeText(this, "Thank you", Toast.LENGTH_LONG, Toast.STYLE_SUCCESS).show();
 				}
 			break;
 		}

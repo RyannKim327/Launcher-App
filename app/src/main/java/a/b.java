@@ -8,7 +8,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
-import android.widget.Toast;
 import mpop.revii.launcher.R;
 
 public class b extends PreferenceActivity {
@@ -84,7 +83,7 @@ public class b extends PreferenceActivity {
 		switch(requestCode){
 			case 0:
 				if(grantResults.length > 0 & grantResults[0] == PackageManager.PERMISSION_GRANTED){
-					Toast.makeText(b.this, "Thank you", 1).show();
+					Toast.makeText(b.this, "Thank you", Toast.LENGTH_LONG, Toast.STYLE_SUCCESS);
 				}
 			break;
 		}
