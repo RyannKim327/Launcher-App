@@ -1,16 +1,13 @@
 package a;
-import android.view.View.OnTouchListener;
-import android.view.View;
-import android.view.MotionEvent;
 import android.content.Context;
 import android.view.GestureDetector;
-import android.widget.Toast;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.View.OnTouchListener;
 
 public abstract class swiper implements OnTouchListener {
 	private GestureDetector ges;
-	private Context a;
 	public swiper(Context ctx){
-		a = ctx;
 		ges = new GestureDetector(ctx, new gesture());
 	}
 	

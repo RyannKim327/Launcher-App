@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
@@ -22,7 +23,6 @@ import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.ListView;
@@ -30,13 +30,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextClock;
 import android.widget.TextView;
 import android.widget.Toast;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import java.util.ArrayList;
-import android.graphics.Typeface;
 
 public class a extends Activity {
 	lists str;
@@ -85,7 +84,11 @@ public class a extends Activity {
 		td.setOnClickListener(new OnClickListener(){
 				@Override
 				public void onClick(View p1) {
-					startActivity(new Intent(a.this, b.class));
+					if(apps.getVisibility() == View.VISIBLE){
+						hideMenu();
+					}else{
+						startActivity(new Intent(a.this, b.class));
+					}
 				}
 			});
 		
