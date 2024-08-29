@@ -8,6 +8,8 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.RoundRectShape;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -59,13 +61,18 @@ public class a extends Activity {
 		RelativeLayout main = new RelativeLayout(this);
 		LinearLayout widgets = new LinearLayout(this);
 		Intent intent = new Intent(Intent.ACTION_MAIN, (Uri) null);
-		intent.addCategory(Intent.CATEGORY_LAUNCHER);
+        intent.addCategory(Intent.CATEGORY_LAUNCHER);
 		list = getPackageManager().queryIntentActivities(intent, 0);
 		apps = new ListView(this);
 		lists = new ArrayList<Object>();
 		str = new lists(this, lists);
 		
 		LinearLayout td = new LinearLayout(this);
+        float[] r = {
+            10, 10, 10, 10,
+            10, 10, 10, 10
+        };
+        ShapeDrawable drawable = new ShapeDrawable(new RoundRectShape(r, null, null));
 		time = new TextClock(this);
 		date = new TextClock(this);
 		myName = new TextView(this);
@@ -74,8 +81,13 @@ public class a extends Activity {
 		
 		sp = PreferenceManager.getDefaultSharedPreferences(this);
 		String customQuotes = sp.getString("c_quotes", "");
-		td.setOrientation(LinearLayout.VERTICAL);
+		
+        drawable.getPaint().setColor(Color.argb(0.3f, 1f, 1f, 1f));
+        
+        td.setBackground(drawable);
+        td.setOrientation(LinearLayout.VERTICAL);
 		td.setGravity(Gravity.CENTER);
+        td.setPadding(13, 8, 13, 8);
 		td.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 		td.setOnClickListener(new OnClickListener(){
 				@Override
@@ -92,17 +104,18 @@ public class a extends Activity {
 		time.setFormat24Hour("kk:mm:ss");
 		time.setTextSize(30);
 		time.setGravity(Gravity.CENTER);
-		time.setTypeface(Typeface.createFromAsset(getAssets(), "digital-7.ttf"));
+		time.setTypeface(Typeface.createFromAsset(getAssets(), "digital-7.ttf"), Typeface.BOLD);
 		
 		date.setFormat12Hour("EEE dd, MMM, yyyy");
 		date.setFormat24Hour("EEE dd, MMM, yyyy");
 		date.setTextSize(15);
 		date.setGravity(Gravity.CENTER);
-		date.setTypeface(Typeface.createFromAsset(getAssets(), "digital-7.ttf"));
+		date.setTypeface(Typeface.createFromAsset(getAssets(), "digital-7.ttf"), Typeface.BOLD);
 		
 		myName.setText(greet(sp.getString("name", "RyannKim327")));
 		myName.setTextSize(10);
 		myName.setGravity(Gravity.CENTER);
+        myName.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
 		
 		String data = sp.getString("QUOTES", "");
 		
@@ -126,11 +139,13 @@ public class a extends Activity {
 		q.setTextSize(12);
 		q.setGravity(Gravity.FILL);
 		q.setPadding(0, 5, 0, 0);
+        q.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
 		q.setLayoutParams(new LayoutParams(Math.round(getWindowManager().getDefaultDisplay().getWidth() * 0.7f), LayoutParams.WRAP_CONTENT));
 		
 		au.setTextSize(12);
 		au.setGravity(Gravity.RIGHT);
 		au.setPadding(0, 5, 0, 0);
+        au.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
 		au.setLayoutParams(new LayoutParams(Math.round(getWindowManager().getDefaultDisplay().getWidth() * 0.7f), LayoutParams.WRAP_CONTENT));
 		
 		base.setOrientation(LinearLayout.VERTICAL);
@@ -348,6 +363,7 @@ public class a extends Activity {
 		TranslateAnimation anim = new TranslateAnimation(0, 0, 0, getWindowManager().getDefaultDisplay().getHeight());
 		anim.setDuration(750);
 		apps.setVisibility(View.GONE);
+        apps.setLayoutParams(new RelativeLayout.LayoutParams(0, 0));
 		apps.setAnimation(anim);
 		base.setBackgroundColor(Color.TRANSPARENT);
 	}
@@ -431,6 +447,7 @@ public class a extends Activity {
 			TranslateAnimation anim = new TranslateAnimation(0, 0, getWindowManager().getDefaultDisplay().getHeight(), 0);
 			anim.setDuration(750);
 			apps.setVisibility(View.VISIBLE);
+            apps.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT));
 			apps.setAnimation(anim);
 			base.setBackgroundColor(Color.parseColor("#90000000"));
 		}else{
