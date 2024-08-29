@@ -26,4 +26,3 @@ git clone https://github.com/RyannKim327/Launcher-App.git
 10. Replit (for hosting my server aide)
 11. Stackoverflow
 12. Github
-
