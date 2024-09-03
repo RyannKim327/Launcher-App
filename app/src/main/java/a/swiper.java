@@ -16,7 +16,7 @@ public abstract class swiper implements OnTouchListener {
 		return ges.onTouchEvent(p2);
 	}
 	private final class gesture extends GestureDetector.SimpleOnGestureListener{
-		private static final int SWIPE_T = 100;
+		private static final int SWIPE_T = 75;
 		private static final int SWIPE_V = 100;
 
 		@Override
