@@ -35,6 +35,7 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import android.graphics.Paint;
 
 public class a extends Activity {
 	lists str;
@@ -45,6 +46,7 @@ public class a extends Activity {
 	SharedPreferences sp;
 	LinearLayout base;
 	ArrayList<Object> lists;
+    AI ai;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +59,7 @@ public class a extends Activity {
 			requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 0);
 		}
 		
+        RelativeLayout _ = new RelativeLayout(this);
 		base = new LinearLayout(this);
 		RelativeLayout main = new RelativeLayout(this);
 		LinearLayout widgets = new LinearLayout(this);
@@ -66,12 +69,14 @@ public class a extends Activity {
 		apps = new ListView(this);
 		lists = new ArrayList<Object>();
 		str = new lists(this, lists);
+        ai = new AI(this);
 		
 		LinearLayout td = new LinearLayout(this);
         float[] r = {
             10, 10, 10, 10,
             10, 10, 10, 10
         };
+        
         ShapeDrawable drawable = new ShapeDrawable(new RoundRectShape(r, null, null));
 		time = new TextClock(this);
 		date = new TextClock(this);
@@ -82,7 +87,8 @@ public class a extends Activity {
 		sp = PreferenceManager.getDefaultSharedPreferences(this);
 		String customQuotes = sp.getString("c_quotes", "");
 		
-        drawable.getPaint().setColor(Color.argb(0.3f, 1f, 1f, 1f));
+        drawable.getPaint().setColor(Color.argb(0.3f, 0f, 0f, 0f));
+        drawable.getPaint().setShadowLayer(3, 0, 0, Color.argb(0.3f, 0f, 0f, 0f));
         
         td.setBackground(drawable);
         td.setOrientation(LinearLayout.VERTICAL);
@@ -99,6 +105,8 @@ public class a extends Activity {
 					}
 				}
 			});
+        
+         _.setBackgroundDrawable(getWallpaper());
 		
 		time.setFormat12Hour("hh:mm:ss");
 		time.setFormat24Hour("kk:mm:ss");
@@ -174,15 +182,21 @@ public class a extends Activity {
 			}
 			@Override
 			public void onSwipeLeft() {
+                showAi();
 			}
 			@Override
 			public void onSwipeRight() {
+                showAi();
 			}
 			@Override
 			public void onSwipeTop(){
 				showOnMenu();
 			}
 		});
+        
+        ai.setVisibility(View.GONE);
+        ai.setBackgroundColor(Color.TRANSPARENT);
+        ai.setLayoutParams(new RelativeLayout.LayoutParams(0, 0));
 		
 		td.addView(time);
 		td.addView(date);
@@ -191,9 +205,12 @@ public class a extends Activity {
 		td.addView(au);
 		widgets.addView(td);
 		main.addView(apps);
+        
 		base.addView(widgets);
 		base.addView(main);
-		setContentView(base);
+        _.addView(base);
+        _.addView(ai);
+		setContentView(_);
 		load();
 		quotes();
 		update();
@@ -228,6 +245,7 @@ public class a extends Activity {
 			getWindow().setStatusBarColor(Color.TRANSPARENT);
 		}else{
 			getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            setTheme(android.R.style.Theme_DeviceDefault_NoActionBar_Fullscreen);
 		}
 		
 		myName.setTextSize(size);
@@ -454,9 +472,19 @@ public class a extends Activity {
 			hideMenu();
 		}
 	}
+    void showAi(){
+        if(ai.getVisibility() == View.GONE){
+            ai.setVisibility(View.VISIBLE);
+            ai.setLayoutParams(new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+        }else{
+            ai.setVisibility(View.GONE);
+            ai.setLayoutParams(new RelativeLayout.LayoutParams(0, 0));
+        }
+    }
 	@Override
 	public void onBackPressed() {
-		showOnMenu();
+		// showOnMenu();
+        showAi();
 	}
 	@Override
 	public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
