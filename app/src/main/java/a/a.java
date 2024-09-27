@@ -36,6 +36,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import android.graphics.Paint;
+import java.util.Comparator;
 
 public class a extends Activity {
 	lists str;
@@ -106,7 +107,7 @@ public class a extends Activity {
 				}
 			});
         
-         _.setBackgroundDrawable(getWallpaper());
+        _.setBackgroundDrawable(getWallpaper());
 		
 		time.setFormat12Hour("hh:mm:ss");
 		time.setFormat24Hour("kk:mm:ss");
@@ -297,6 +298,7 @@ public class a extends Activity {
 			app[i] = i;
 		}
 
+        
 		for(int i = 0; i < app_.length; i++){
 			for(int j = 0; j < i; j++){
 				char a = app_[i].toLowerCase().charAt(0);
@@ -331,6 +333,23 @@ public class a extends Activity {
 		for(int i = 0; i < app_.length; i++){
 			lists.add(list.get(app[i]));
 		}
+        /*
+        for(int i = 0; i < list.size() - 1; i++){
+            for(int j = 0; j < list.size() - 1; j++){
+                int k = 0;
+                String a = lists.get(i).toString();
+                String b = lists.get(j).toString();
+                while(a.charAt(k) == b.charAt(k)){
+                    k++;
+                }
+                if(a.charAt(k) < b.charAt(k)){
+                   Object x = lists.get(i);
+                   lists.set(i, lists.get(j));
+                   lists.set(j, x);
+                }
+            }
+        }*/
+        
 		apps.setAdapter(str);
 		apps.setOnItemClickListener(new OnItemClickListener(){
 				@Override
