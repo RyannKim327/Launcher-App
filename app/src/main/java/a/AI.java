@@ -261,8 +261,8 @@ public class AI extends RelativeLayout implements TextToSpeech.OnInitListener {
 			@Override
 			public boolean onLongClick(View p1) {
 				// INFO: AI Versions based on the API
-				final String[] ver = {"v3", "v3-32k", "gemini", "turbo", "turbo-16k"};
-				final String[] ai = {"GPT-4", "GPT-4 32k", "Google Gemini (Formerly Bard)", "GPT-3", "GPT-3 Turbo"};
+				final String[] ver = {"v3", "v3-32k", "gemini", "turbo", "turbo-16k", "llama3-70b", "llama3-8b", "mixtral-8x7b", "gemma-7b", "gemma2-9b"};
+				final String[] ai = {"GPT-4", "GPT-4 32k", "Google Gemini (Formerly Bard)", "GPT-3", "GPT-3 Turbo", "Llama 3 70b", "Llama 3 8b", "Mixtral 8x7b", "Gemma 7b", "Gemma 2 9b"};
 				final ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, ai);
 				AlertDialog.Builder a = new AlertDialog.Builder(ctx);
 				a.setTitle("SELECT AI VERSION: ");
